@@ -1,0 +1,240 @@
+\ProvidesPackage{macrossty}
+
+\RequirePackage{amsmath}
+\RequirePackage{amssymb}
+% \RequirePackage{amsthm}         % \theoremstyle{plain/definition/remark}
+\RequirePackage{array}          % \newcolumntype
+\RequirePackage{mathtools}      % \DeclarePairedDelimiter
+\RequirePackage{xifthen}        % \ifthenelse, \isempty
+\RequirePackage{xparse}         % \NewDocumentCommand (more manageable optional parameters)
+\RequirePackage{todonotes}
+
+
+\RequirePackage{amssymb,boxedminipage,amsmath,complexity}
+\RequirePackage[normalem]{ulem}
+\RequirePackage[export]{adjustbox}
+
+\RequirePackage{enumitem}
+\RequirePackage{framed}
+\RequirePackage{xspace}
+\RequirePackage{xifthen}
+\RequirePackage{tabularx}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%% For images
+
+
+% image w(L) = 6
+\newcommand{\setVi}[4]{
+    \def\vertWidth{1.1}  %distance between vertices
+    \def\ind{#1} %vertex indentifier
+    \def\xpos{#2} %x position of vertex
+    \def\ypos{#3} %y position of vertex
+    \def\numRows{#4} %numbers of rows
+    
+    %Rectangle that encloses vertex set V_\ind
+    \draw[thick, gray] (\xpos , \ypos) rectangle (\xpos + 2*\vertWidth, \ypos - \numRows * \vertWidth) node[left, black] at (\xpos + \vertWidth, \ypos) {$V_\ind$};
+    
+    %Set internal vertices: y^{j}_{l,1} and y^{j}_{l,2}
+    \foreach \i in {1, ..., \numRows} {
+        \node[draw, circle, inner sep=1pt] (y\ind\i1) at (\xpos + \vertWidth/2 , \ypos + \vertWidth/2 - \i*\vertWidth) {$y^{\ind}_{\i,a}$};
+        \node[draw, circle, inner sep=1pt] (y\ind\i2) at (\xpos+ \vertWidth/2 +\vertWidth, \ypos + \vertWidth/2 - \i*\vertWidth) {$y^{\ind}_{\i,b}$};
+    }
+}
+
+% image w(L) = 4
+\newcommand{\singleNode}[4]{
+    \def\lab{#4}
+    \ifx\empty\lab     
+        \pgfkeys{/nodeType/.style={draw = none, circle, minimum size=.5cm}}
+     \else
+          \pgfkeys{/nodeType/.style={ draw, circle, minimum size=.5cm}}
+     \fi
+     \node[/nodeType] (H#1) at (#2, #3) {\lab};
+}
+
+\newcommand{\squareGadget}[4]{
+    \pgfkeys{/nodeType/.style={ draw, circle, minimum size=.5cm}, %fill=blue!20,
+            /vertexCircle/.style={thick, draw, line width=.4mm}}
+    \def\vertWidth{1.1}  %distance between vertices    
+    \def\ind{#1} %vertex indentifier
+    \def\xpos{#2} %x position of vertex  
+    \def\ypos{#3} %y position of vertex
+    \def\name{#4}  % label of vertex
+    
+    %Circle that encloses vertex
+    \draw[/vertexCircle] (\xpos , \ypos - 1.*\vertWidth) circle (1.25 * \vertWidth)
+    node[above, black] at (\xpos , \ypos + 0.25*\vertWidth) {\large$\name_\ind$}; 
+    
+    %Set internal vertices of size 4
+    \foreach \i in {1, 2} {
+        \node[/nodeType] (S\ind\i1) at (\xpos - \vertWidth/2 , \ypos + \vertWidth/2 - \i*\vertWidth) {};
+        \node[/nodeType] (S\ind\i2) at (\xpos + \vertWidth/2, \ypos + \vertWidth/2 - \i*\vertWidth) {};
+    }    
+    %Edges
+    \draw (S\ind11) -- (S\ind12) node[midway, above] {$T$};
+    \draw (S\ind21) -- (S\ind22) node[midway, above] {$F$};
+}
+
+\newcommand{\triangleGadget}[8]{
+    \pgfkeys{/nodeType/.style={ draw, circle, minimum size=.5cm}} %, inner sep=2.5pt
+    \def\vertWidth{1.1}  % dist between vertices    
+    \def\ind{#1} %vertex indentifier
+    \def\xpos{#2} %x position of vertex  
+    \def\ypos{#3} %y position of vertex
+    \def\type{#4} %type of line of big circle
+    %\def\ndegree{#5} % degree of vertex
+    \def\desc{#5} % description of vertex
+    \ifx\empty\type     
+        \pgfkeys{/vertexCircle/.style={thick, draw, line width=.4mm}}
+     \else
+          \pgfkeys{/vertexCircle/.style={dashed, gray!70, draw, line width=.4mm}}
+     \fi
+    
+
+    %Circle that encloses vertex
+    \draw[/vertexCircle] (\xpos , \ypos - 1.*\vertWidth) circle (1.25 * \vertWidth)
+    node[above, black] at (\xpos , \ypos - 2.8*\vertWidth) {\desc};
+    %node[above, black] at (\xpos- 1.3*\vertWidth, \ypos) {\footnotesize\ndegree};
+    
+    %Set internal vertices of size 4
+    \node[/nodeType] (T\ind11) at (\xpos, \ypos + .7*\vertWidth - \vertWidth) {\footnotesize#6};
+    \node[/nodeType] (T\ind21) at (\xpos - \vertWidth/2 , \ypos + \vertWidth/2 - 2*\vertWidth) {\footnotesize#7};
+    \node[/nodeType] (T\ind22) at (\xpos + \vertWidth/2, \ypos + \vertWidth/2 - 2*\vertWidth) {\footnotesize#8};
+}
+
+\newcommand{\pairGadget}[7]{
+    \pgfkeys{/nodeType/.style={ draw, circle, minimum size=.5cm}} %fill=blue!20,
+    \def\vertWidth{1.1}  % dist entre vertices    
+    \def\ind{#1} %vertex indentifier
+    \def\xpos{#2} %x position of vertex  
+    \def\ypos{#3} %y position of vertex
+    \def\type{#4} %type of line of big circle
+    %\def\ndegree{#5} % degree of vertex
+    \def\desc{#5} % description of vertex
+    \ifx\empty\type     
+        \pgfkeys{/vertexCircle/.style={thick, draw, line width=.4mm}}
+     \else
+          \pgfkeys{/vertexCircle/.style={dashed, gray!70, draw, line width=.4mm}}
+     \fi
+    
+
+    %Circle that encloses vertex
+    \draw[/vertexCircle] (\xpos , \ypos - 1.*\vertWidth) circle (1.25 * \vertWidth)
+    node[above, black] at (\xpos , \ypos - 2.8*\vertWidth) {\desc};
+    %node[above, black] at (\xpos- 1.3*\vertWidth, \ypos) {\footnotesize\ndegree};
+    
+    %Set internal vertices
+    %\node[/nodeType] (P\ind11) at (\xpos - .6*\vertWidth , \ypos - \vertWidth) {\footnotesize#6};
+    %\node[/nodeType] (P\ind12) at (\xpos + .6*\vertWidth, \ypos - \vertWidth) {\footnotesize#7};
+    %\draw (P\ind11) -- (P\ind12);
+
+    \node[/nodeType, fill=black!20] (P\ind01) at (\xpos, \ypos + .7*\vertWidth - \vertWidth) { };
+    \node[/nodeType] (P\ind11) at (\xpos - \vertWidth/2 , \ypos + \vertWidth/2 - 2*\vertWidth) {\footnotesize#6};
+    \node[/nodeType] (P\ind12) at (\xpos + \vertWidth/2, \ypos + \vertWidth/2 - 2*\vertWidth) {\footnotesize#7};
+    \draw[solid, thick] (P\ind01) -- (P\ind11) -- (P\ind12) -- (P\ind01);
+}
+
+\def\sample{
+    \pgfkeys{/edgeType1/.style={solid, thick},
+              /edgeType2/.style={dashed, thick, gray!70},
+              /edgeType4/.style={line width=1.2mm, blue!60, draw opacity=0.7}}
+
+    \def \horspacing {4}
+    
+    \triangleGadget{1}{0}{0}{}{}{u}{v}{w}
+    \singleNode{1}{.5}{1.2}{}
+    \singleNode{2}{-.5}{1.2}{}    
+    \singleNode{3}{-2}{-2}{}
+    \singleNode{4}{-1.5}{-3}{}
+    \singleNode{5}{1.5}{-3}{}
+    \singleNode{6}{2}{-2}{}
+
+    \triangleGadget{2}{\horspacing}{0}{0}{}{u}{v}{w}
+    \singleNode{7}{\horspacing + 0.5}{1.2}{}
+    \singleNode{8}{\horspacing - 0.5}{1.2}{}     
+    \singleNode{9}{\horspacing - 2}{-2}{}
+    \singleNode{10}{\horspacing - 1.5}{-3}{}
+    \singleNode{11}{\horspacing + 1.5}{-3}{}
+    \singleNode{12}{\horspacing + 2}{-2}{}
+
+    \foreach \x/\y in {T111/H2, T111/H1, T121/H3, T121/H4, T122/H5, T122/H6, T111/T121, T121/T122, T122/T111, T211/H7, T211/H8, T221/H9, T221/H10, T222/H11, T222/H12}
+        \draw[/edgeType1] (\x) -- (\y); % Desenha as bordas
+    \draw[/edgeType2] (T211) -- (T221) -- (T222) -- (T211);       
+}
+
+
+
+%% Cute problem environment
+
+\captionsetup{compatibility=false}
+
+\newlength{\RoundedBoxWidth}
+\newsavebox{\GrayRoundedBox}
+\newenvironment{GrayBox}[1]%
+   {\setlength{\RoundedBoxWidth}{.93\textwidth}
+    \def\boxheading{#1}
+    \begin{lrbox}{\GrayRoundedBox}
+       \begin{minipage}{\RoundedBoxWidth}}%
+   {   \end{minipage}
+    \end{lrbox}
+    \begin{center}
+    \begin{tikzpicture}%
+       \node(Text)[draw=black!20,fill=white,rounded corners,%
+             inner sep=2ex,text width=\RoundedBoxWidth]%
+             {\usebox{\GrayRoundedBox}};
+        \coordinate(x) at (current bounding box.north west);
+        \node [draw=white,rectangle,inner sep=3pt,anchor=north west,fill=white]
+        at ($(x)+(6pt,.75em)$) {\boxheading};
+    \end{tikzpicture}
+    \end{center}}
+
+\newenvironment{defproblemx}[2][]{\noindent\ignorespaces%
+                                \FrameSep=6pt%
+                                \parindent=0pt%
+                \vspace*{-1.5em}
+                \ifthenelse{\isempty{#1}}{%
+                  \begin{GrayBox}{\textsc{#2}}%
+                }{%
+                  \begin{GrayBox}{\textsc{#2} parameterized by~{#1}}%
+                }
+                \newcommand\Prob{Problem:}%
+                \newcommand\Input{Input:}%
+                \begin{tabular*}{\textwidth}{@{\hspace{.1em}} >{\itshape} p{1.8cm} p{0.8\textwidth} @{}}%
+            }{
+                \end{tabular*}%
+                \end{GrayBox}%
+                \ignorespacesafterend
+            }
+
+
+\newcommand{\defproblema}[3]{%
+  \begin{defproblemx}{#1}
+    {\bf Input:}  & #2 \\
+    {\bf Question:} & #3
+  \end{defproblemx}
+}%
+
+\newcommand{\defproblemaOPT}[3]{%
+  \begin{defproblemx}{#1}
+    {\bf Instance:}  & #2 \\
+    {\bf Goal:} & #3
+  \end{defproblemx}
+}%
+
+\newcommand\problemdef[3]{
+	\defproblema{#1}{#2}{#3}
+}
+
+\newcommand\problemdefOPT[3]{
+	\defproblemaOPT{#1}{#2}{#3}
+}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\DeclareOption*{\PackageWarning{macros}{Unknown ‘\CurrentOption’}}
+\ProcessOptions\relax

@@ -1,0 +1,167 @@
+% \documentclass[handout, xcolor=table]{beamer}
+\documentclass[xcolor=table]{beamer}
+
+%-----------------------[ Macros ]----------------------------------------------%
+
+\input{macros}
+
+\newcounter{finalframe}
+\newcommand{\stopcounter}{
+  \setcounter{finalframe}{\insertframenumber}
+}
+
+\newcommand{\resumecounter}{
+  \setcounter{framenumber}{\value{finalframe}}
+}
+
+\newcommand{\inccounter}{
+  \setcounter{framenumber}{\value{finalframe} + 1}
+}
+
+%-----------------------[ Template ]-------------------------------------------%
+
+\mode<presentation> {
+    \usetheme[sectionpage=none, progressbar=frametitle, block=fill]{moloch} % modern fork of the metropolis theme
+    \setbeamertemplate{footline}[frame number] % to replace the footer line in all slides with a simple slide count
+}
+\setbeamerfont{footnote}{size=\tiny}
+\setbeamertemplate{navigation symbols}{}
+\setbeamertemplate{footnote}{%
+    \hangpara{2em}{1}%
+    \makebox[2em][l]{\tiny\insertfootnotemark}%
+    \hspace{-1em}\tiny\insertfootnotetext\par\vspace{0.2cm}%
+}
+\setbeamercolor{background canvas}{bg=white}
+
+%-----------------------[ (Sub)Section Slides ]--------------------------------%
+
+\AtBeginSection[]{
+    \begin{frame}
+    \vfill
+    \centering
+    \setbeamercolor{title}{bg=mDarkTeal,fg=black!2}
+    \begin{beamercolorbox}[sep=8pt,center,shadow=true]{title}
+        \usebeamerfont{title}\insertsectionhead\par%
+    \end{beamercolorbox}
+    \vfill
+    \end{frame}
+}
+
+\makeatletter
+\newcommand{\subseqslide}{
+\begin{frame}
+  \setbeamercolor{title}{bg=mDarkTeal,fg=black!2}
+  \centering
+  \begin{minipage}{22em}
+    \raggedright
+    \begin{beamercolorbox}[sep=8pt,center,shadow=true]{title}
+        \usebeamerfont{title}\insertsectionhead\par%
+    \end{beamercolorbox}
+    \usebeamertemplate*{progress bar in section page}
+    \par
+    \ifx\insertsubsectionhead\@empty\else%
+      \vskip-.6\baselineskip
+      \usebeamercolor[fg]{subsection title}%
+      \usebeamerfont{subsection title}%
+      \insertsubsectionhead{}
+    \fi
+  \end{minipage}
+  \par
+  \vspace{\baselineskip}
+\end{frame}
+}
+
+\AtBeginSubsection[]{%
+\subseqslide
+
+% \setcounter{tocdepth}{3}
+% \frame<beamer>{ 
+%   \frametitle{}
+%   \centering
+%   \begin{minipage}{20em}
+%   \tableofcontents[
+%     currentsection,currentsubsection,sectionstyle=show/hide,subsectionstyle=show/shaded/hide,subsubsectionstyle=show/show/hide/hide
+%   ]    
+%   \end{minipage}
+% }
+}
+\makeatother
+
+%-----------------------[ Title page ]-----------------------------------------%
+
+\title{
+  Realizing Graphs with Cut Constraints%
+  %\texorpdfstring{\footnote{Financiado pela Fundação de Amparo à Pesquisa do Estado de São Paulo~(FAPESP) processo \mbox{\#2022/13435-4}}{}}
+}
+
+\titlegraphic{
+  \includegraphics[height=1.cm]{logos/ic.png}
+  \hfill
+  \includegraphics[height=1.2cm]{logos/unicamp.png}
+}
+
+\author{
+\textbf{Lucas de Oliveira Silva}\inst{1}
+\and \\
+Vítor Gomes Chagas\inst{1}
+\and \\
+Samuel Plaça de Paula\inst{1}
+\and \\
+Greis Yvet Oropeza Quesquén\inst{1}
+\and \\
+Uéverton dos Santos Souza\inst{2,3}
+}
+
+\institute{
+$^1$ Unicamp, Campinas, Brazil \newline
+$^2$ IMPA, Rio de Janeiro, Brazil \newline
+$^3$ UFF, Niterói, Brazil \\ \vspace{0.25cm}
+}
+
+\date{\hfill 30th May 2025}
+
+\beamerdefaultoverlayspecification{<+->}
+
+\begin{document}
+
+\hyphenpenalty=10000
+
+\begin{frame}[plain]
+  \titlepage
+\end{frame}
+
+%------------------------------------------------------------------------------%
+
+\section{Classic Problems}
+\input{1-classic}
+
+\section{Nontrivial Cut Constraints}
+\input{2-gr_c}
+
+\section{Conclusion}
+\input{3-conclusion}
+
+\begin{frame}
+  \large{\centerline{Thank you all for the attention...}}
+  \Huge{\centerline{The End}}
+\end{frame}
+
+%-----------------------[ Bibliography ]---------------------------------------%
+
+\appendix
+
+\beamerdefaultoverlayspecification{}
+\setbeamertemplate{bibliography item}[text]
+\begin{frame}
+  \frametitle{Bibliography}
+  {
+    \tiny
+    \bibliographystyle{alpha}
+    \bibliography{bibliography}
+  }
+\end{frame}
+
+%-----------------------[ Backup ]---------------------------------------------%
+
+
+\end{document}
