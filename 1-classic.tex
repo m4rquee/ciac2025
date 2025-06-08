@@ -1,5 +1,5 @@
-\begin{frame}{Graph Realization Problem}
-  \defproblema{Graph Realization}
+\begin{frame}{Old Graph Realization Problem}
+  \defproblema{Graph Realization (GR)}
     {A non-decreasing sequence $\texttt{d} = (d_1, \dots, d_n)$ of natural numbers.}
     {Is $\texttt{d}$ a graphic sequence?}
 \end{frame}
@@ -12,17 +12,16 @@
   \begin{minipage}{\linewidth}
     \centering
     \includegraphics[height=4cm]{images/real1.png}
-    \pause
-    or
-    \includegraphics[height=4cm]{images/real2.png}
   \end{minipage}
 \end{frame}
 
 \begin{frame}{Graphic Sequences Characterization}
   \begin{theorem}[Erd\H{o}s and Gallai~\cite{erdos60}]
     A non-decreasing sequence $\texttt{d} = (d_1, \dots, d_n)$ of natural numbers is graphic if and only if \bigbreak
+    \pause
     
     1. $\sum\limits_{i=1}^n d_i$ is even, and \medskip
+    \pause
 
     2. For every $1 \le k \le n$,
         \[
@@ -35,27 +34,10 @@
     \begin{enumerate}[-]
         \item Erd\H{o}s–Gallai gives a simple poly-time criterion;
         
-        \item Many variations of the problem have been considered; 
+        \item Many variations have been considered; 
         
-        \item Vertex degree = size of trivial edge cut;
+        \item Vertex degree $=$ size of trivial edge cut;
         
-        \item We generalize this by adding nontrivial cut-size constraints.
+        \item We generalize this idea by adding nontrivial constraints.
     \end{enumerate}
 \end{frame}
-
-\begin{frame}{$k$-factors}
-    \centering
-    A \emph{$k$-factor} of a graph $G$ is a $k$-regular spanning subgraph of $G$.
-    \bigbreak
-    \pause
-    A matching is a $1$-factor.
-\end{frame}
-
-\begin{frame}{$f$-factors}
-    \centering
-    A spanning subgraph $H$ of $G$ is a \emph{$f$-factor}, where $f \colon V \to \N$, if $d_H(v) = f(v)$ for all $v \in V$.
-    \bigbreak
-    \pause
-    $f$-factors can be found in cubic time~\cite{Ans85}.
-\end{frame}
-

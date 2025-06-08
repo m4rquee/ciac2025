@@ -1,71 +1,76 @@
 \begin{frame}{Preliminaries}
-    Fixed a graph $G = (V, E)$ where $V = \{v_1, \dots, v_n\}$
+    For a fixed graph $G = (V, E)$ where $V = \{v_1, \dots, v_n\}:$
     \pause
     \bigbreak
     \begin{enumerate}[-]
         \item A \emph{cut list} is a list of pairs $\call = \{(S_1, \ell_1), \dots, (S_m, \ell_m)\}$;
         
-        \item For each $j$ we have $\emptyset \ne S_j \subsetneq V$ and $\ell_j \in \N$;
+        \item For each $j$, we have $\emptyset \ne S_j \subsetneq V$ and $\ell_j \in \N$;
         
         \item $G$ \emph{realizes} $\mathcal{L}$ if $|\partial(S_j)|=\ell_j$ for every $(S_j, \ell_j) \in \mathcal{L}$;
 
-        \item By $w(\call)$ we denote $\max_j\ |S_j|$.
+        \item By $w(\call)$ we denote $\max\limits_j\ |S_j|$.
     \end{enumerate}
 \end{frame}
 
 \begin{frame}{New Graph Realization Problem}
   \defproblema{Graph Realization with Cut Constraints (GR-C)}
-    {A cut list $\call$ for a set of vertices $V = \{v_1, \dots, v_n\}$, and a non-decreasing sequence $\texttt{d} = (d_1, \dots, d_n)$ of natural numbers.}
-    {Does there exist a simple graph $G = (V, E)$ such that, for every $j$, $d(v_j) = d_j$ and $G$ realizes $\call$?}
+    {A cut list $\call$ for a set of vertices \mbox{$V = \{v_1, \dots, v_n\}$}, and a non-decreasing sequence $\texttt{d} = (d_1, \dots, d_n)$ of natural numbers.}
+    {Does there exist a (labeled) simple graph \mbox{$G = (V, E)$} such that, for every $j$, $d(v_j) = d_j$ and $G$ realizes $\call$?}
 \end{frame}
 
-\begin{frame}{Running Example}
+\begin{frame}{Example}
   \centering
-  Consider $\texttt{d}=(3, 2, 2, 2, 1)$ and $\call = \{(\{a, d\}, 4), (\{c, d, e\}, 2)\}:$
+  Consider $\texttt{d}=(d_1 = 3, d_2 = 2, d_3 = 2, d_4 = 2, d_5 = 1)$ and $\call = \{(\{v_2, v_3\}, 4), (\{v_1, v_2, v_5\}, 2)\}:$
   \pause
   \bigbreak
   \begin{minipage}{\linewidth}
     \centering
     \includegraphics[height=4cm]{images/cut1.png}
-    \pause
-    \includegraphics[height=4cm]{images/cut2.png}
   \end{minipage}
 \end{frame}
 
 \begin{frame}{Observations}
     \begin{enumerate}[-]
 
-    \item If $\call = \emptyset$, we have the classic realization problem;
+    \item If $\call = \emptyset$, we have GR;
 
-    % \item Assume that $2 \le |S_j| \le n-2$ for every $j$;
+    \item Assume that $2 \le |S_j| \le n-2$ for every $j$;
 
-    \item We can see GR-C as a consistency check for cut-queries in learning an unknown graph.
+    \item If $\binom{V}{2} \subseteq \{S_j \mid (S_j, \ell_j) \in \mathcal{L}\} $ then the problem becomes trivial;
+
+    \item GR-C can be seen as a consistency check for cut-queries.
 
   \end{enumerate}
 \end{frame}
 
 \begin{frame}{Important Remark}
     \centering
-    For $S \subseteq V$ let $d(S) = \sum\limits_{u \in S} d(u)$.
+    For $S \subseteq V$ let $d(S) = \sum\limits_{v_j \in S} d_j$.
     \bigbreak
     \pause
     \begin{remark}[1]
-        An instance $(\texttt{d}, \call)$ is true only if, for each $(S, \ell) \in \call$, $\ell \in \{ d(S) - 2k \mid 0 \leq k \leq \binom{|S|}{2} \}$.
+        An instance $(\texttt{d}, \call)$ is true only if, for each $(S, \ell) \in \call$,
+        \pause
+        $\ell \in \{ d(S) - 2k \mid 0 \leq k \leq \binom{|S|}{2} \}$.
     \end{remark}
 \end{frame}
 
 \subsection{Small Cuts}
 
 \begin{frame}{Fixed Edges}
-    For a solution $G$ if $(\set{u, v}, d(u) + d(v) - 2) \in \call$ then $uv \in E(G)$.
+    \centering
+    If $(\set{u, v}, d_u + d_v - 2) \in \call$ then $uv \in E(G)$.
 \end{frame}
 
 \begin{frame}{Forbidden Edges}
-    For a solution $G$ if $(\set{u, v}, d(u) + d(v)) \in \call$ then $uv \notin E(G)$.
+    \centering
+    If $(\set{u, v}, d_u + d_v) \in \call$ then $uv \notin E(G)$.
 \end{frame}
 
-\begin{frame}{Simplification}
-    Replace $(\set{u, v}, d(u) + d(v) - 2)$ by $(\set{u, v}, d(u) + d(v))$ while updating $\texttt{d}$.
+\begin{frame}{A Single Case}
+    \centering
+    Replace $(\set{u, v}, d_u + d_v - 2)$ by $(\set{u, v}, d_u + d_v)$ while updating $\texttt{d}$.
 \end{frame}
 
 \begin{frame}{Possibility Graph}
@@ -91,22 +96,25 @@
     We can reduce to the previous case!
     \pause
     \bigbreak
-    \begin{theorem}[1]
+    \begin{theorem}[2]
         An instance $(\texttt{d}, \call)$ of GR-C can be solved in polynomial time whenever $w(\call) = 3$.
     \end{theorem}
 \end{frame}
 
-\begin{frame}{Proof}
+\begin{frame}{Proof Sketch}
     \centering
     Consider a cut $(S, \ell) \in \call$ where $S = \set{u, v, w}$.
+    \pause
+    \bigbreak
+    As an example, let $d_u = d_v = d_w = 2$ (so $d(S) = 6$).
 \end{frame}
 
-\begin{frame}{Case $\ell = d(S)$}
+\begin{frame}{Case $\ell = d(S) = 6$}
     \centering
     \includegraphics[height=4cm]{images/3cut1.png}
 \end{frame}
 
-\begin{frame}{Case $\ell = d(S) - 4$}
+\begin{frame}{Case $\ell = d(S) - 4 = 2$}
     \centering
     \includegraphics[height=4cm]{images/3cut4.png}
 \end{frame}
@@ -114,12 +122,15 @@
 \begin{frame}{Other Cases}
     \centering
     \Large
-    $\ell = d(S) - 2$ or $\ell = d(S) - 6$
+    \begin{align}
+                    & \ell = d(S) - 2 = 4 \nonumber \\    
+        \text{and } & \ell = d(S) - 6 = 0 \nonumber
+    \end{align}
 \end{frame}
 
 \begin{frame}{Running Example}
   \centering
-  $\texttt{d}=(3, 2, 2, 2, 1)$ and $\call = \{(\{a, d\}, 4), (\{c, d, e\}, 2)\}$:
+  $\texttt{d}=(d_1 = 3, d_2 = 2, d_3 = 2, d_4 = 2, d_5 = 1)$ and $\call = \{(\{v_2, v_3\}, 4), (\{v_1, v_2, v_5\}, 2)\}$:
   \bigbreak
   \begin{minipage}{\linewidth}
     \centering
@@ -141,29 +152,32 @@
 
 \begin{frame}{Size 4 Cut Constraints}
     \centering
+    \Large
     Can we keep doing a case-by-case analysis?
     \pause
     \bigbreak
-    No, we cannot, as the GR-C becomes hard!
+    No, we cannot, and the GR-C becomes hard!
 \end{frame}
 
 \begin{frame}{Intuition}
     \centering
-    For $S \in \binom{V}{3}$, the edges within $S$ determine how degrees change.
+    \Large
+    For $S \in \binom{V}{3}$, $E[S]$ determines how degrees change.
     \pause
     \bigbreak
-    In contrast, when $S \in \binom{V}{4}$, this claim does not hold anymore.
+    In contrast, for $S \in \binom{V}{4}$, this claim no longer holds.
 \end{frame}
 
 \begin{frame}{Hardness}
     \centering
-    \begin{theorem}[2]
+    \begin{theorem}[3]
         The GR-C problem cannot be solved in polynomial time unless $P = NP$ even when $w(\call) = 4$ and all degrees in the degree sequence $\texttt{d}$ are 1.
     \end{theorem}
 \end{frame}
 
 \begin{frame}{Proof}
     \centering
+    \Large
     Reduction from $k$-True \rXthreeSAT{}
 \end{frame}
 
@@ -216,7 +230,7 @@
 
 \begin{frame}{Complete Example}
     \centering
-    $(\bar{x}_1 + x_3)(x_1 + x_2 + x_4)(x_1 + \bar{x}_4)(\bar{x}_2 + \bar{x}_3)(x_2 + x_3 + x_4)$ and $k=1$
+    $(\bar{x}_1 + x_3)(x_1 + x_2 + x_4)(x_1 + \bar{x}_4)(\bar{x}_2 + \bar{x}_3)(x_2 + x_3 + x_4)$ and $k=1$:
     \begin{figure}
         \centering
         \includegraphics[width=0.9\textwidth]{images/reduction/full.png}
